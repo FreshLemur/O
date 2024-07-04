@@ -1,35 +1,364 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Колесо Фортуни</title>
-    <link rel="stylesheet" href="styles.css " />
+    <meta charset="utf-8" />
+    <title>Wheel of Fortune Bingo</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="wheel-container">
-      <div class="wheel">
-        <section class="section first-section">
-          <div class="segment">1</div>
-          <div class="segment">2</div>
-          <div class="segment">3</div>
-        </section>
-        <section class="section second-section">
-          <div class="segment">4</div>
-          <div class="segment">5</div>
-          <div class="segment">6</div>
-        </section>
-        <section class="section third-section">
-          <div class="segment">7</div>
-          <div class="segment">8</div>
-          <div class="segment">9</div>
-        </section>
-        <section class="section fourth-section">
-          <div class="segment">10</div>
-          <div class="segment">11</div>
-          <div class="segment">12</div>
-        </section>
-      </div>
-    </div>
+    <div id="chart"></div>
+    <div id="question"><h1></h1></div>
+
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8">
+      var padding = { top: 20, right: 40, bottom: 0, left: 0 },
+        w = 500 - padding.left - padding.right,
+        h = 500 - padding.top - padding.bottom,
+        r = Math.min(w, h) / 2,
+        rotation = 0,
+        oldrotation = 0,
+        picked = 100000,
+        oldpick = [],
+        color = d3.scale.category20();
+
+      var data = [
+        {
+          label: "Найпрекрасніша?",
+          value: 1,
+          question: "Тииииииииииииииииииииииииииииии, хто ж ще?)",
+        },
+        {
+          label: "Хто моє прекрасне диво?",
+          value: 1,
+          question: "Оленка-Боленка!!!",
+        },
+        {
+          label: "Кого я любюблю?",
+          value: 1,
+          question: "Олену Ружинську Олексіївну",
+        },
+        {
+          label: "10 цьомів від Дмитра",
+          value: 1,
+          question: "Вітаю, тепер я в боргу. )))",
+        },
+        {
+          label: "Наказ!",
+          value: 1,
+          question: "Насолоджуйся цим днем в усмішці, сонце. )",
+        },
+        {
+          label: "Відпочинок",
+          value: 1,
+          question: "Люба, тобі час відпочити. ;)",
+        },
+        {
+          label: "Все разом!",
+          value: 1,
+          question: "Це перемога, все і відразу!",
+        },
+        {
+          label: "Поразка",
+          value: 1,
+          question: "Дмитро давно не бачив твої груди, еге ж?)",
+        },
+        {
+          label: "Велика перемога",
+          value: 1,
+          question: "Щось давно Дмитро свій член не відправляв.",
+        },
+        {
+          label: "Будь який настрій",
+          value: 1,
+          question: "Де твоя усмішка?)",
+        },
+        {
+          label: "Дупця",
+          value: 1,
+          question: "Щось Дмитро давно не бачив твоєї прекрасної дупці",
+        },
+        {
+          label: "Випадкове нагадування",
+          value: 1,
+          question: "Час усміхнутися і не сумувати. :3",
+        },
+        {
+          label: "Краса",
+          value: 1,
+          question:
+            "Для прекрасної дівчини, прекрасні слова - ти найпрекрасніша!",
+        },
+        {
+          label: "PeooWiooWe",
+          value: 1,
+          question: "Чиє піувіуві немає меж?)",
+        }, //<h1>
+        {
+          label: "Обійми",
+          value: 1,
+          question: "Ходи обійматься, я обійму тебе, сонце. :3",
+        }, //margin
+        {
+          label: "Я люблю тебе).",
+          value: 1,
+          question: "Так, я справді люблю тебе, моя найдивовижніша.",
+        }, //< >
+        {
+          label: "Хто холося дівка?)",
+          value: 1,
+          question: "Алєєєєєєєєєєєєна.",
+        }, // { }
+        {
+          label: "Повернула голову?",
+          value: 1,
+          question: "Which HTML tag is used for specifying a paragraph?",
+        }, //<p>
+        {
+          label: "Таємниця",
+          value: 1,
+          question: "Я відсуваю, що тобі треба усміхнутися",
+        }, //<!DOCTYPE html>
+        {
+          label: "Нічний випадок",
+          value: 1,
+          question:
+            "Ні, не сомнофілія, просто бажаю на добраніч та солодких снів. ;)",
+        }, //<head>
+        {
+          label: "Раночку!",
+          value: 1,
+          question: "Найпрекрасніший ранок починається з мастурбації, еге ж?)",
+        }, // colon
+        {
+          label: "Шепіт",
+          value: 1,
+          question: "Без лишніх слів - знімай труси. ))",
+        }, // <style>
+        {
+          label: "Потрахаться і спать",
+          value: 1,
+          question: "Ти зверху чи знизу?)",
+        }, // .html
+        {
+          label: "Яскрава",
+          value: 1,
+          question: "Ти яскрава немов сонце.",
+        }, // HTML
+        {
+          label: "Таємниця",
+          value: 1,
+          question: "Ти - ахуєнна",
+        }, // CSS
+        {
+          label: "Таємниця",
+          value: 1,
+          question: "I love you. :3",
+        }, // JavaScript
+        {
+          label: "Таємниця",
+          value: 1,
+          question: "ДОВГІ ЛІІІІТЕРИ ДЛЯ ТРИВАЛОГОООО НАСТРОЮЮЮЮЮ",
+        }, // border
+        {
+          label: "Таємниця",
+          value: 1,
+          question: "ОЙОЙОЙ, А ДЕ УСМІІІІІІІІІІІІІІІІІІШКА???????????????",
+        }, //semi-colon
+        {
+          label: "Таємниця",
+          value: 1,
+          question: "Варіант 'Все разом'",
+        }, //100%
+        {
+          label: "ЯТЛ ВПН НСДІ ВБД 6МР",
+          value: 1,
+          question: "Ось ми і пів року разом, моє диво, іхіхі. ",
+        }, //comma
+      ];
+
+      var svg = d3
+        .select("#chart")
+        .append("svg")
+        .data([data])
+        .attr("width", w + padding.left + padding.right)
+        .attr("height", h + padding.top + padding.bottom);
+
+      var container = svg
+        .append("g")
+        .attr("class", "chartholder")
+        .attr(
+          "transform",
+          "translate(" +
+            (w / 2 + padding.left) +
+            "," +
+            (h / 2 + padding.top) +
+            ")"
+        );
+
+      var vis = container.append("g");
+
+      var pie = d3.layout
+        .pie()
+        .sort(null)
+        .value(function (d) {
+          return 1;
+        });
+
+      // declare an arc generator function
+      var arc = d3.svg.arc().outerRadius(r);
+
+      // select paths, use arc generator to draw
+      var arcs = vis
+        .selectAll("g.slice")
+        .data(pie)
+        .enter()
+        .append("g")
+        .attr("class", "slice");
+
+      arcs
+        .append("path")
+        .attr("fill", function (d, i) {
+          return color(i);
+        })
+        .attr("d", function (d) {
+          return arc(d);
+        });
+
+      // add the text
+      arcs
+        .append("text")
+        .attr("transform", function (d) {
+          d.innerRadius = 0;
+          d.outerRadius = r;
+          d.angle = (d.startAngle + d.endAngle) / 2;
+          return (
+            "rotate(" +
+            ((d.angle * 180) / Math.PI - 90) +
+            ")translate(" +
+            (d.outerRadius - 10) +
+            ")"
+          );
+        })
+        .attr("text-anchor", "end")
+        .text(function (d, i) {
+          return data[i].label;
+        });
+
+      container.on("click", spin);
+
+      function spin(d) {
+        container.on("click", null);
+
+        //all slices have been seen, all done
+        console.log(
+          "OldPick: " + oldpick.length,
+          "Data length: " + data.length
+        );
+        if (oldpick.length == data.length) {
+          console.log("done");
+          container.on("click", null);
+          return;
+        }
+
+        var ps = 360 / data.length,
+          pieslice = Math.round(1440 / data.length),
+          rng = Math.floor(Math.random() * 1440 + 360);
+
+        rotation = Math.round(rng / ps) * ps;
+
+        picked = Math.round(data.length - (rotation % 360) / ps);
+        picked = picked >= data.length ? picked % data.length : picked;
+
+        if (oldpick.indexOf(picked) !== -1) {
+          d3.select(this).call(spin);
+          return;
+        } else {
+          oldpick.push(picked);
+        }
+
+        rotation += 90 - Math.round(ps / 2);
+
+        vis
+          .transition()
+          .duration(3000)
+          .attrTween("transform", rotTween)
+          .each("end", function () {
+            //mark question as seen
+            d3.select(".slice:nth-child(" + (picked + 1) + ") path").attr(
+              "fill",
+              "#111"
+            );
+
+            //populate question
+            d3.select("#question h1").text(data[picked].question);
+
+            oldrotation = rotation;
+
+            container.on("click", spin);
+          });
+      }
+
+      //make arrow
+      svg
+        .append("g")
+        .attr(
+          "transform",
+          "translate(" +
+            (w + padding.left + padding.right) +
+            "," +
+            (h / 2 + padding.top) +
+            ")"
+        )
+        .append("path")
+        .attr(
+          "d",
+          "M-" + r * 0.15 + ",0L0," + r * 0.05 + "L0,-" + r * 0.05 + "Z"
+        )
+        .style({ fill: "black" });
+
+      //draw spin circle
+      container
+        .append("circle")
+        .attr("cx", 0)
+        .attr("cy", 0)
+        .attr("r", 60)
+        .style({ fill: "white", cursor: "pointer" });
+
+      //spin text
+      container
+        .append("text")
+        .attr("x", 0)
+        .attr("y", 15)
+        .attr("text-anchor", "middle")
+        .text("💖")
+        .style({ "font-weight": "bold", "font-size": "30px" });
+
+      function rotTween(to) {
+        var i = d3.interpolate(oldrotation % 360, rotation);
+        return function (t) {
+          return "rotate(" + i(t) + ")";
+        };
+      }
+
+      function getRandomNumbers() {
+        var array = new Uint16Array(1000);
+        var scale = d3.scale.linear().range([360, 1440]).domain([0, 100000]);
+
+        if (
+          window.hasOwnProperty("crypto") &&
+          typeof window.crypto.getRandomValues === "function"
+        ) {
+          window.crypto.getRandomValues(array);
+          console.log("works");
+        } else {
+          //no support for crypto, get crappy random numbers
+          for (var i = 0; i < 1000; i++) {
+            array[i] = Math.floor(Math.random() * 100000) + 1;
+          }
+        }
+
+        return array;
+      }
+    </script>
   </body>
 </html>
