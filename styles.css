@@ -1,100 +1,62 @@
-html {
-  color-scheme: dark;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
 body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+}
+
+.wheel {
+  background-color: yellow;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  grid-template-columns: repeat(50, 10px);
+  grid-template-rows: repeat(50, 10px);
+  grid-column: 5 100px;
+}
+
+.section {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.first-section {
+  grid-column: 25 / 51;
+  grid-row: 1 / 25;
   background-color: black;
+  border-top-right-radius: 50%;
 }
 
-h1,
-h2,
-h3 {
-  text-align: center;
+.second-section {
+  grid-column: 25 / 51;
+  grid-row: 25 / 51;
+  background-color: red;
+  border-bottom-right-radius: 50%;
 }
 
-main > h2 {
-  margin-top: 5vh;
+.third-section {
+  grid-column: 1 / 25;
+  grid-row: 1 / 25;
+  background-color: orange;
+  border-top-left-radius: 50%;
 }
 
-h2 > span {
-  color: red;
+.fourth-section {
+  grid-column: 1 / 25;
+  grid-row: 25 / 51;
+  background-color: pink;
+  border-bottom-left-radius: 50%;
 }
 
-/* .wheel-of-fortune {
-  height: 40vh;
-  width: 40vh;
-  background-color: white;
-  border-radius: 162px;
-} */
-
-:where(.ui-wheel-of-fortune) {
-  --_items: 12;
-  all: unset;
-  aspect-ratio: 1 / 1;
-  background: crimson;
-  container-type: inline-size;
-  direction: ltr;
-  display: grid;
-  place-content: center start;
-}
-
-li {
-  align-content: center;
-  background: deepskyblue;
-  display: grid;
-  font-size: 5cqi;
-  grid-area: 1 / -1;
-  list-style: none;
-  padding-left: 1ch;
-  transform-origin: center right;
-  width: 50cqi;
-}
-
-li {
-  &:nth-of-type(1) {
-    --_idx: 1;
-  }
-  &:nth-of-type(2) {
-    --_idx: 2;
-  }
-  &:nth-of-type(3) {
-    --_idx: 3;
-  }
-  &:nth-of-type(4) {
-    --_idx: 4;
-  }
-  &:nth-of-type(5) {
-    --_idx: 5;
-  }
-  &:nth-of-type(6) {
-    --_idx: 6;
-  }
-  &:nth-of-type(7) {
-    --_idx: 7;
-  }
-  &:nth-of-type(8) {
-    --_idx: 8;
-  }
-  &:nth-of-type(9) {
-    --_idx: 9;
-  }
-  &:nth-of-type(10) {
-    --_idx: 10;
-  }
-  &:nth-of-type(11) {
-    --_idx: 11;
-  }
-  &:nth-of-type(12) {
-    --_idx: 12;
-  }
-  /* etc. */
-}
-
-li {
-  rotate: calc(360deg / var(--_items) * calc(var(--_idx) - 1));
-}
-
-li {
-  background: hsl(calc(360deg / var(--_items) * calc(var(--_idx))), 100%, 75%);
+.segment {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
 }
