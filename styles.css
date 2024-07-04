@@ -3,6 +3,15 @@ text {
   font-size: 13px;
   pointer-events: none;
 }
+
+body {
+  background-color: black;
+}
+
+h1 {
+  color: white;
+}
+
 #chart {
   position: absolute;
   width: 500px;
