@@ -1,0 +1,100 @@
+html {
+  color-scheme: dark;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  background-color: black;
+}
+
+h1,
+h2,
+h3 {
+  text-align: center;
+}
+
+main > h2 {
+  margin-top: 5vh;
+}
+
+h2 > span {
+  color: red;
+}
+
+/* .wheel-of-fortune {
+  height: 40vh;
+  width: 40vh;
+  background-color: white;
+  border-radius: 162px;
+} */
+
+:where(.ui-wheel-of-fortune) {
+  --_items: 12;
+  all: unset;
+  aspect-ratio: 1 / 1;
+  background: crimson;
+  container-type: inline-size;
+  direction: ltr;
+  display: grid;
+  place-content: center start;
+}
+
+li {
+  align-content: center;
+  background: deepskyblue;
+  display: grid;
+  font-size: 5cqi;
+  grid-area: 1 / -1;
+  list-style: none;
+  padding-left: 1ch;
+  transform-origin: center right;
+  width: 50cqi;
+}
+
+li {
+  &:nth-of-type(1) {
+    --_idx: 1;
+  }
+  &:nth-of-type(2) {
+    --_idx: 2;
+  }
+  &:nth-of-type(3) {
+    --_idx: 3;
+  }
+  &:nth-of-type(4) {
+    --_idx: 4;
+  }
+  &:nth-of-type(5) {
+    --_idx: 5;
+  }
+  &:nth-of-type(6) {
+    --_idx: 6;
+  }
+  &:nth-of-type(7) {
+    --_idx: 7;
+  }
+  &:nth-of-type(8) {
+    --_idx: 8;
+  }
+  &:nth-of-type(9) {
+    --_idx: 9;
+  }
+  &:nth-of-type(10) {
+    --_idx: 10;
+  }
+  &:nth-of-type(11) {
+    --_idx: 11;
+  }
+  &:nth-of-type(12) {
+    --_idx: 12;
+  }
+  /* etc. */
+}
+
+li {
+  rotate: calc(360deg / var(--_items) * calc(var(--_idx) - 1));
+}
+
+li {
+  background: hsl(calc(360deg / var(--_items) * calc(var(--_idx))), 100%, 75%);
+}
